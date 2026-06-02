@@ -2,12 +2,12 @@
    글로벌 스타일 및 디자인 토큰 정의
    ========================================== */
 :root {
-    /* 메인 포인트 컬러 (제시해주신 테마 컬러) */
+    /* 메인 컬러 */
     --primary-color: #672be0;
     --primary-hover: #521eb8;
     --primary-light: #f0eaff;
     
-    /* 시스템 색상 */
+    /* 컬러 */
     --bg-color: #f8f9fa;
     --card-bg: #ffffff;
     --text-color: #2d3748;
@@ -77,18 +77,26 @@ header {
     font-weight: 300;
 }
 
-/* 날짜 조작 네비게이터 (일간 뷰) */
-.date-navigator {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 16px;
-    background-color: var(--primary-light);
-    border-radius: var(--border-radius);
-    margin-top: 12px;
+/* ==========================================
+   주간 캘린더 영역 (Weekly Calendar)
+   ========================================== */
+.weekly-calendar {
+    margin-top: 16px;
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 15px rgba(103, 43, 224, 0.03);
 }
 
-.date-nav-btn {
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.calendar-nav-btn {
     background: none;
     border: none;
     color: var(--primary-color);
@@ -104,15 +112,143 @@ header {
     transition: var(--transition);
 }
 
-.date-nav-btn:hover {
-    background-color: rgba(103, 43, 224, 0.12);
+.calendar-nav-btn:hover {
+    background-color: var(--primary-light);
+    transform: scale(1.05);
 }
 
 .current-date-display {
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: 1.02rem;
+    font-weight: 700;
     color: var(--primary-color);
-    letter-spacing: -0.2px;
+    letter-spacing: -0.3px;
+    background: var(--primary-light);
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+
+.week-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+/* 개별 일자 카드 */
+.day-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 4px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    user-select: none;
+    position: relative;
+    border: 1px solid transparent;
+}
+
+.day-item:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+}
+
+.day-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.day-number {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-color);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-bottom: 4px;
+    transition: var(--transition);
+}
+
+/* Todo 개수 표시 */
+.todo-count-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background-color: #edf2f7;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 16px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+/* 오늘 날짜 스타일 */
+.day-item.today {
+    border: 2px solid var(--primary-color);
+    background-color: var(--primary-light);
+}
+
+.day-item.today::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+}
+
+.day-item.today .day-name {
+    color: var(--primary-color);
+}
+
+.day-item.today .day-number {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* 선택 날짜 제목 */
+.selected-day-title {
+    margin-bottom: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* 선택된 날짜 스타일 */
+.day-item.selected {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 6px 14px rgba(103, 43, 224, 0.25);
+    transform: translateY(-2px);
+}
+
+.day-item.selected .day-name {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.day-item.selected .day-number {
+    color: #ffffff;
+}
+
+.day-item.selected .todo-count-badge {
+    background-color: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+}
+
+/* 선택되면서 오늘인 경우 */
+.day-item.selected.today {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #8b5cf6 100%);
+    border-color: transparent;
+}
+
+.day-item.selected.today::before {
+    background-color: #ffffff;
 }
 
 /* ==========================================
@@ -397,3 +533,6 @@ header {
     background-color: #e9ecef;
     color: var(--text-color);
 }
+
+
+

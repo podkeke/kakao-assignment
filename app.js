@@ -16,9 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterTabs = document.querySelector('.filter-tabs');
     
     // 날짜 제어 관련 DOM 요소 캐싱
-    const prevDateBtn = document.getElementById('prev-date-btn');
-    const nextDateBtn = document.getElementById('next-date-btn');
+    const prevWeekBtn = document.getElementById('prev-week-btn');
+    const nextWeekBtn = document.getElementById('next-week-btn');
     const currentDateDisplay = document.getElementById('current-date-display');
+    const weekDaysContainer = document.getElementById('week-days-container');
 
     // ------------------------------------------
     // 2. 애플리케이션 상태 (State) 및 상수 관리
@@ -75,9 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // 필터 탭 클릭 이벤트 리스너 등록
         filterTabs.addEventListener('click', handleFilterChange);
 
-        // 날짜 네비게이션 버튼 클릭 이벤트 리스너 등록
-        prevDateBtn.addEventListener('click', handlePrevDate);
-        nextDateBtn.addEventListener('click', handleNextDate);
+        // 주간 네비게이션 버튼 클릭 이벤트 리스너 등록
+        prevWeekBtn.addEventListener('click', handlePrevWeek);
+        nextWeekBtn.addEventListener('click', handleNextWeek);
     }
 
     // ------------------------------------------
@@ -150,25 +151,118 @@ document.addEventListener('DOMContentLoaded', () => {
      * 날짜 표시부의 텍스트를 현재 상태(currentDate)에 맞춰 갱신하는 함수
      */
     function updateDateDisplay() {
-        currentDateDisplay.textContent = getDisplayDateString(currentDate);
+        const monday = getMonday(currentDate);
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+
+        currentDateDisplay.textContent =
+            `${monday.getMonth() + 1}/${monday.getDate()} ~ ${sunday.getMonth() + 1}/${sunday.getDate()}`;
     }
 
     /**
-     * 이전 날짜로 이동하는 핸들러 함수
+     * 특정 날짜의 월요일에 해당하는 Date 객체를 반환하는 함수 (월요일 시작 기준)
+     * @param {Date} date 
+     * @returns {Date} 월요일 Date 객체
      */
-    function handlePrevDate() {
-        currentDate.setDate(currentDate.getDate() - 1);
+    function getMonday(date) {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        return new Date(d.setDate(diff));
+    }
+
+    /**
+     * 이전 주차로 이동하는 핸들러 함수
+     */
+    function handlePrevWeek() {
+        currentDate.setDate(currentDate.getDate() - 7);
         updateDateDisplay();
         renderTodoItems();
     }
 
     /**
-     * 다음 날짜로 이동하는 핸들러 함수
+     * 다음 주차로 이동하는 핸들러 함수
      */
-    function handleNextDate() {
-        currentDate.setDate(currentDate.getDate() + 1);
+    function handleNextWeek() {
+        currentDate.setDate(currentDate.getDate() + 7);
         updateDateDisplay();
         renderTodoItems();
+    }
+
+    /**
+     * 주간 캘린더 영역을 동적으로 렌더링하는 함수
+     */
+    function renderWeeklyCalendar() {
+        weekDaysContainer.innerHTML = '';
+        
+        // 오늘 날짜 문자열 (비교용)
+        const todayString = getFormattedDateString(new Date());
+        // 현재 선택된 날짜 문자열 (비교용)
+        const selectedString = getFormattedDateString(currentDate);
+        
+        // 현재 선택된 날짜가 포함된 주의 월요일 계산
+        const monday = getMonday(currentDate);
+        
+        // 요일 레이블 목록 (가로 나열 순서: 월 ~ 일)
+        const dayLabels = ['월', '화', '수', '목', '금', '토', '일'];
+        
+        // 월요일부터 일요일까지 7일간의 날짜 카드 생성
+        for (let i = 0; i < 7; i++) {
+            const thisDay = new Date(monday);
+            thisDay.setDate(monday.getDate() + i);
+            
+            const thisFormattedDate = getFormattedDateString(thisDay);
+            const thisDayNum = thisDay.getDate();
+            const thisDayLabel = dayLabels[i];
+            
+            // 해당 일자의 Todo 개수 계산 (로컬스토리지에 있는 todoItems 기준)
+            const todoCount = todoItems.filter(todo => todo.date === thisFormattedDate).length;
+            
+            // 일자 카드 컨테이너 생성
+            const dayItemEl = document.createElement('div');
+            dayItemEl.className = 'day-item';
+            
+            // 오늘 날짜 여부 체크 및 스타일 클래스 부여
+            if (thisFormattedDate === todayString) {
+                dayItemEl.classList.add('today');
+            }
+            
+            // 선택된 날짜 여부 체크 및 스타일 클래스 부여
+            if (thisFormattedDate === selectedString) {
+                dayItemEl.classList.add('selected');
+            }
+            
+            // 요일명 엘리먼트
+            const dayNameEl = document.createElement('span');
+            dayNameEl.className = 'day-name';
+            dayNameEl.textContent = thisDayLabel;
+            
+            // 일자 숫자 엘리먼트
+            const dayNumberEl = document.createElement('span');
+            dayNumberEl.className = 'day-number';
+            dayNumberEl.textContent = thisDayNum;
+            
+            // 개수 뱃지 엘리먼트
+            const badgeEl = document.createElement('span');
+            badgeEl.className = 'todo-count-badge';
+            badgeEl.textContent = todoCount;
+            
+            // 카드 조립
+            dayItemEl.appendChild(dayNameEl);
+            dayItemEl.appendChild(dayNumberEl);
+            dayItemEl.appendChild(badgeEl);
+            
+            // 일자 카드 클릭 이벤트 핸들러 바인딩
+            dayItemEl.addEventListener('click', () => {
+                currentDate = new Date(thisDay);
+
+                updateDateDisplay();
+                renderWeeklyCalendar();
+                renderTodoItems();
+            });
+            
+            weekDaysContainer.appendChild(dayItemEl);
+        }
     }
 
     // ------------------------------------------
@@ -371,6 +465,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderTodoItems() {
         todoList.innerHTML = '';
 
+        const selectedDayTitle =
+            document.getElementById('selected-day-title');
+
+        if (selectedDayTitle) {
+            selectedDayTitle.textContent =
+                `${getDisplayDateString(currentDate)} 할 일`;
+        }
+
         // 기준 날짜 문자열 가져오기
         const targetDateString = getFormattedDateString(currentDate);
 
@@ -465,6 +567,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // 최종 리스트 추가
             todoList.appendChild(todoItemEl);
         });
+
+        // 주간 캘린더 화면 갱신 호출
+        renderWeeklyCalendar();
     }
 
     // ------------------------------------------

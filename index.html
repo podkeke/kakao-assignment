@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minimalist Todo App</title>
-    <!-- Google Fonts: Outfit (깔끔하고 세련된 영문/숫자 폰트) & Noto Sans KR (가독성 높은 한글 폰트) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -19,11 +18,16 @@
                 <p class="subtitle">오늘의 할 일을 깔끔하게 관리해보세요.</p>
             </div>
             
-            <!-- 날짜 네비게이션 영역 (일간 뷰) -->
-            <div class="date-navigator">
-                <button id="prev-date-btn" class="date-nav-btn" aria-label="이전 날짜">&lt;</button>
-                <span id="current-date-display" class="current-date-display">로드 중...</span>
-                <button id="next-date-btn" class="date-nav-btn" aria-label="다음 날짜">&gt;</button>
+            <!-- 주간 캘린더 영역 -->
+            <div class="weekly-calendar">
+                <div class="calendar-header">
+                    <button id="prev-week-btn" class="calendar-nav-btn" aria-label="이전 주차">&lt;</button>
+                    <span id="current-date-display" class="current-date-display">로드 중...</span>
+                    <button id="next-week-btn" class="calendar-nav-btn" aria-label="다음 주차">&gt;</button>
+                </div>
+                <div class="week-days" id="week-days-container">
+                    <!-- JavaScript : 월요일부터 일요일까지의 날짜 카드가 삽입-->
+                </div>
             </div>
         </header>
 
@@ -50,8 +54,9 @@
 
         <!-- 할 일 목록 영역 -->
         <section class="list-section">
+            <h3 id="selected-day-title" class="selected-day-title"></h3>
             <ul id="todo-list">
-                <!-- 할 일 아이템들이 JavaScript를 통해 동적으로 여기에 추가됩니다 -->
+                <!-- JavaScript : 할 일 아이템들이 동적으로 추가됨-->
             </ul>
         </section>
     </div>
