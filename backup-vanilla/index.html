@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Todo App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 애플리케이션 헤더 영역 -->
+        <header>
+            <div class="header-top">
+                <h1 class="app-title">TaskFlow</h1>
+                <p class="subtitle">오늘의 할 일을 깔끔하게 관리해보세요.</p>
+            </div>
+            
+            <!-- 주간 캘린더 영역 -->
+            <div class="weekly-calendar">
+                <div class="calendar-header">
+                    <button id="prev-week-btn" class="calendar-nav-btn" aria-label="이전 주차">&lt;</button>
+                    <span id="current-date-display" class="current-date-display">로드 중...</span>
+                    <button id="next-week-btn" class="calendar-nav-btn" aria-label="다음 주차">&gt;</button>
+                </div>
+                <div class="week-days" id="week-days-container">
+                    <!-- JavaScript : 월요일부터 일요일까지의 날짜 카드가 삽입-->
+                </div>
+            </div>
+        </header>
+
+        <!-- 할 일 입력 폼 영역 -->
+        <section class="input-section">
+            <form id="todo-form" novalidate>
+                <div class="input-group">
+                    <input type="text" id="todo-input" placeholder="새로운 할 일을 입력하세요..." autocomplete="off">
+                    <button type="submit" id="todo-submit-btn">추가</button>
+                </div>
+                <!-- 입력값 누락 시 표시될 안내 메시지 -->
+                <p id="error-message" class="error-message"></p>
+            </form>
+        </section>
+
+        <!-- 필터 탭 영역 -->
+        <section class="filter-section">
+            <div class="filter-tabs">
+                <button class="filter-btn active" data-filter="all">전체</button>
+                <button class="filter-btn" data-filter="active">진행 중</button>
+                <button class="filter-btn" data-filter="completed">완료</button>
+            </div>
+        </section>
+
+        <!-- 할 일 목록 영역 -->
+        <section class="list-section">
+            <h3 id="selected-day-title" class="selected-day-title"></h3>
+            <ul id="todo-list">
+                <!-- JavaScript : 할 일 아이템들이 동적으로 추가됨-->
+            </ul>
+        </section>
+    </div>
+
+    <!-- 메인 애플리케이션 스크립트 연결 -->
+    <script src="app.js"></script>
+</body>
+</html>

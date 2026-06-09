@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Outfit', 'Noto Sans KR', sans-serif;
+  
+  --color-primary: #672be0;
+  --color-primary-hover: #521eb8;
+  --color-primary-light: #f0eaff;
+  
+  --color-success: #48bb78;
+  --color-danger: #f56565;
+  --color-danger-hover: #e53e3e;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #f8f9fa;
+  color: #2d3748;
+}
+
+/* 스크롤바 커스텀 */
+.todo-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.todo-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.todo-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.todo-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
