@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
 @import "tailwindcss";
 
 @theme {
@@ -16,6 +18,8 @@ body {
   font-family: var(--font-sans);
   background-color: #f8f9fa;
   color: #2d3748;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* 스크롤바 커스텀 */
